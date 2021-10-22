@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
-export const Header = () => (
+export const PageHeader = () => (
   <header>
     <Heading variant="h1">Home page</Heading>
   </header>

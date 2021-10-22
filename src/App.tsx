@@ -1,14 +1,24 @@
+import { Container, Grid } from '@mui/material';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css';
-import { Header } from './components/Header';
+import { PageHeader } from './components/Header';
 import { Weather } from './components/Weather';
 
-function App() {
+const queryClient = new QueryClient();
+
+const App = () => {
   return (
-    <div className="App">
-      <Header />
-      <Weather />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        <Container>
+          <PageHeader />
+          <Grid sx={{ marginTop: 5 }}>
+            <Weather />
+          </Grid>
+        </Container>
+      </div>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;

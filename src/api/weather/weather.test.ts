@@ -6,6 +6,7 @@ describe('weather API', () => {
       const actualWeather = await getWeather('sydney');
 
       const expectedWeather = {
+        location: 'Sydney',
         shortDescription: 'Clear',
         longDescription: 'clear sky',
         temperature: {

@@ -3,6 +3,7 @@ import { WeatherFormatted, WeatherResponse } from './types';
 export const parseWeatherResponse = (
   weatherResponse: WeatherResponse
 ): WeatherFormatted => ({
+  location: weatherResponse.name,
   shortDescription: weatherResponse.weather[0]?.main ?? '',
   longDescription: weatherResponse.weather[0]?.description ?? '',
   temperature: {
