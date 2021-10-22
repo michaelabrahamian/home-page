@@ -1,7 +1,7 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { OPEN_WEATHER_MAP_WEATHER_API_URL } from "./constants";
-import { WeatherFormatted, WeatherResponse } from "./types";
-import { parseWeatherResponse } from "./parser";
+import axios, { AxiosRequestConfig } from 'axios';
+import { OPEN_WEATHER_MAP_WEATHER_API_URL } from './constants';
+import { WeatherFormatted, WeatherResponse } from './types';
+import { parseWeatherResponse } from './parser';
 
 export const getWeather = async (query: string): Promise<WeatherFormatted> => {
   const config: AxiosRequestConfig = {

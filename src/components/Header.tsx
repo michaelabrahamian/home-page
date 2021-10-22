@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import { Typography } from '@mui/material';
+import { styled } from '@mui/system';
 
 export const Header = () => (
   <header>

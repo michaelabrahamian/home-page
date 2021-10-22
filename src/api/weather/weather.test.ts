@@ -1,13 +1,13 @@
-import { getWeather } from "./weather";
-import { parseWeatherResponse } from "./parser";
-import { DEFAULT_WEATHER_RESPONSE } from "../../test-utils/mocks/weather";
+import { getWeather } from './weather';
+import { parseWeatherResponse } from './parser';
+import { DEFAULT_WEATHER_RESPONSE } from '../../test-utils/mocks/weather';
 
-describe("weather API", () => {
-  describe("parseWeatherResponse", () => {
-    it("parses a default response payload correcetly", () => {
+describe('weather API', () => {
+  describe('parseWeatherResponse', () => {
+    it('parses a default response payload correcetly', () => {
       const expectedWeather = {
-        shortDescription: "Clear",
-        longDescription: "clear sky",
+        shortDescription: 'Clear',
+        longDescription: 'clear sky',
         temperature: {
           average: 291.96,
           min: 289.68,
@@ -22,13 +22,13 @@ describe("weather API", () => {
     });
   });
 
-  describe("getWeather", () => {
-    it("gets weather data from API and processes it correctly", async () => {
-      const actualWeather = await getWeather("sydney");
+  describe('getWeather', () => {
+    it('gets weather data from API and processes it correctly', async () => {
+      const actualWeather = await getWeather('sydney');
 
       const expectedWeather = {
-        shortDescription: "Clear",
-        longDescription: "clear sky",
+        shortDescription: 'Clear',
+        longDescription: 'clear sky',
         temperature: {
           average: 291.96,
           min: 289.68,

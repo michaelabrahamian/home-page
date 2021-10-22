@@ -1,3 +1,3 @@
-import { mockGetWeather } from "./weather";
+import { mockGetWeather } from './weather';
 
 export const handlers = [mockGetWeather];
