@@ -3,6 +3,8 @@ import { Box } from '@mui/system';
 import { useQuery } from 'react-query';
 import { getWeather } from '../api/weather/weather';
 import { SectionHeading } from './SectionHeading';
+import { Typography } from '@mui/material';
+import { Temperature } from './Temperature';
 
 export const Weather = () => {
   const boxStyles = {
@@ -34,9 +36,12 @@ const WeatherContent = () => {
   }
 
   return (
-    <div>
-      <p>{data?.location}</p>
+    <Box>
+      <Typography variant="h3" sx={{ fontSize: 32 }}>
+        {data?.location}
+      </Typography>
+      <Temperature temperature={data?.temperature.average} />
       <p>{data?.longDescription}</p>
-    </div>
+    </Box>
   );
 };
