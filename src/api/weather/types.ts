@@ -45,6 +45,7 @@ export type WeatherResponse = {
 
 export type WeatherFormatted = {
   location: string;
+  icon: string;
   shortDescription: string;
   longDescription: string;
   temperature: {

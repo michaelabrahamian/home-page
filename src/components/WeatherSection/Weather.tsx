@@ -1,7 +1,7 @@
-import { Card, CircularProgress } from '@mui/material';
+import { Card, CircularProgress, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { useQuery } from 'react-query';
-import { getWeather } from '../../api/weather/weather';
+import { getImageURL, getWeather } from '../../api/weather/weather';
 import { SectionHeading } from '../SectionHeading';
 import { Typography } from '@mui/material';
 import { Temperature } from './Temperature';
@@ -10,7 +10,7 @@ import { Humidity } from './Humidity';
 
 export const Weather = () => {
   const boxStyles = {
-    maxWidth: 800,
+    maxWidth: 600,
     margin: 'auto',
   };
 
@@ -37,15 +37,29 @@ const WeatherContent = () => {
     return <span>Error: {error}</span>;
   }
 
+  if (!data) {
+    return null;
+  }
+
   return (
-    <Box>
-      <Typography variant="h3" sx={{ fontSize: 32 }}>
-        {data?.location}
-      </Typography>
-      <Temperature temperature={data?.temperature.average} />
-      <p>{data?.longDescription}</p>
-      <Wind windSpeedMetresPerSecond={data?.windSpeed} />
-      <Humidity humidity={data?.humidity} />
-    </Box>
+    <Grid container justifyContent="space-between">
+      <Grid item px={10} sx={{ textAlign: 'left' }}>
+        <Typography variant="h3" sx={{ fontSize: 32 }}>
+          {data?.location}
+        </Typography>
+        <Temperature temperature={data.temperature.average} />
+        <Wind windSpeedMetresPerSecond={data.windSpeed} />
+        <Humidity humidity={data.humidity} />
+      </Grid>
+
+      <Grid item px={10} sx={{ textAlign: 'center' }}>
+        <img
+          src={getImageURL(data.icon)}
+          alt={data.shortDescription}
+          width="80px"
+        />
+        <p style={{ margin: 0 }}>{data.longDescription}</p>
+      </Grid>
+    </Grid>
   );
 };

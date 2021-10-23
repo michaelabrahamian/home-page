@@ -4,15 +4,18 @@ import { DEFAULT_WEATHER_RESPONSE } from '../../test-utils/mocks/weather';
 describe('parseWeatherResponse', () => {
   it('parses a default response payload correcetly', () => {
     const expectedWeather = {
+      humidity: 60,
+      icon: '01d',
       location: 'Sydney',
-      shortDescription: 'Clear',
       longDescription: 'clear sky',
+      shortDescription: 'Clear',
       temperature: {
-        average: 291.96,
-        min: 289.68,
-        max: 294.32,
-        feelsLike: 292.09,
+        average: 27.62,
+        feelsLike: 28.9,
+        max: 31.86,
+        min: 22.9,
       },
+      windSpeed: 5.36,
     };
 
     const parsedWeather = parseWeatherResponse(DEFAULT_WEATHER_RESPONSE);

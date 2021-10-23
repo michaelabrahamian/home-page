@@ -1,4 +1,4 @@
-import { getWeather } from './weather';
+import { getImageURL, getWeather } from './weather';
 
 describe('weather API', () => {
   describe('getWeather', () => {
@@ -6,18 +6,31 @@ describe('weather API', () => {
       const actualWeather = await getWeather('sydney');
 
       const expectedWeather = {
+        humidity: 60,
+        icon: '01d',
         location: 'Sydney',
-        shortDescription: 'Clear',
         longDescription: 'clear sky',
+        shortDescription: 'Clear',
         temperature: {
-          average: 291.96,
-          min: 289.68,
-          max: 294.32,
-          feelsLike: 292.09,
+          average: 27.62,
+          feelsLike: 28.9,
+          max: 31.86,
+          min: 22.9,
         },
+        windSpeed: 5.36,
       };
 
       expect(actualWeather).toEqual(expectedWeather);
+    });
+  });
+
+  describe('getImageURL', () => {
+    it('returns the expected image URL', () => {
+      const imageURL = getImageURL('code1');
+
+      expect(imageURL).toMatchInlineSnapshot(
+        `"http://openweathermap.org/img/wn/code1@2x.png"`
+      );
     });
   });
 });

@@ -1,14 +1,12 @@
 import { Container, Grid } from '@mui/material';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css';
 import { PageHeader } from './components/Header';
 import { Weather } from './components/WeatherSection/Weather';
-
-const queryClient = new QueryClient();
+import { RenderWithProviders } from './components/RenderWithProviders';
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
+    <RenderWithProviders>
       <div className="App">
         <Container>
           <PageHeader />
@@ -17,7 +15,7 @@ const App = () => {
           </Grid>
         </Container>
       </div>
-    </QueryClientProvider>
+    </RenderWithProviders>
   );
 };
 

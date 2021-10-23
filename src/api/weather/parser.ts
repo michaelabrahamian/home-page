@@ -4,6 +4,7 @@ export const parseWeatherResponse = (
   weatherResponse: WeatherResponse
 ): WeatherFormatted => ({
   location: weatherResponse.name,
+  icon: weatherResponse.weather[0]?.icon,
   shortDescription: weatherResponse.weather[0]?.main ?? '',
   longDescription: weatherResponse.weather[0]?.description ?? '',
   temperature: {

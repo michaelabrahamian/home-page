@@ -1,5 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { OPEN_WEATHER_MAP_WEATHER_API_URL } from './constants';
+import {
+  OPEN_WEATHER_MAP_WEATHER_API_URL,
+  OPEN_WEATHER_MAP_IMAGE_BASE_URL,
+  OPEN_WEATHER_MAP_IMAGE_SUFFIX,
+} from './constants';
 import { WeatherFormatted, WeatherResponse } from './types';
 import { parseWeatherResponse } from './parser';
 
@@ -21,3 +25,6 @@ export const getWeather = async (query: string): Promise<WeatherFormatted> => {
 
   return parseWeatherResponse(weatherResponse.data);
 };
+
+export const getImageURL = (imageCode: string): string =>
+  `${OPEN_WEATHER_MAP_IMAGE_BASE_URL}${imageCode}${OPEN_WEATHER_MAP_IMAGE_SUFFIX}`;

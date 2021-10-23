@@ -7,5 +7,9 @@ export const Temperature = ({ temperature }: TemperatureProps) => {
     return null;
   }
 
-  return <p>{Math.round(temperature)}&#176;C</p>;
+  return (
+    <p>
+      <strong>{Math.round(temperature)}&#176;C</strong>
+    </p>
+  );
 };
