@@ -14,9 +14,9 @@ describe('Temperature', () => {
     expect(screen.getByText('23°C')).toBeInTheDocument();
   });
 
-  it('displays a default temperature if the temperature is undefined', () => {
+  it('displays nothing if temperature is not provided', () => {
     render(<Temperature />);
 
-    expect(screen.getByText('0°C')).toBeInTheDocument();
+    expect(screen.queryByText('°C')).not.toBeInTheDocument();
   });
 });

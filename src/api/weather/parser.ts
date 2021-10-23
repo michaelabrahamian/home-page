@@ -12,4 +12,6 @@ export const parseWeatherResponse = (
     max: weatherResponse.main.temp_max,
     feelsLike: weatherResponse.main.feels_like,
   },
+  windSpeed: weatherResponse.wind.speed,
+  humidity: weatherResponse.main.humidity,
 });

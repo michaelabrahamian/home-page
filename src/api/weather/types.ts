@@ -53,4 +53,6 @@ export type WeatherFormatted = {
     max: number;
     feelsLike: number;
   };
+  windSpeed: number;
+  humidity: number;
 };

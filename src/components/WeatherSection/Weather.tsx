@@ -1,10 +1,12 @@
 import { Card, CircularProgress } from '@mui/material';
 import { Box } from '@mui/system';
 import { useQuery } from 'react-query';
-import { getWeather } from '../api/weather/weather';
-import { SectionHeading } from './SectionHeading';
+import { getWeather } from '../../api/weather/weather';
+import { SectionHeading } from '../SectionHeading';
 import { Typography } from '@mui/material';
 import { Temperature } from './Temperature';
+import { Wind } from './Wind';
+import { Humidity } from './Humidity';
 
 export const Weather = () => {
   const boxStyles = {
@@ -42,6 +44,8 @@ const WeatherContent = () => {
       </Typography>
       <Temperature temperature={data?.temperature.average} />
       <p>{data?.longDescription}</p>
+      <Wind windSpeedMetresPerSecond={data?.windSpeed} />
+      <Humidity humidity={data?.humidity} />
     </Box>
   );
 };
