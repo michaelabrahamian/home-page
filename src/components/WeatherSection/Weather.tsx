@@ -1,14 +1,35 @@
-import { Card, CircularProgress, Grid } from '@mui/material';
+import React from 'react';
+import {
+  Autocomplete,
+  Button,
+  Card,
+  CircularProgress,
+  Grid,
+  TextField,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { useQuery } from 'react-query';
 import { getImageURL, getWeather } from '../../api/weather/weather';
 import { SectionHeading } from '../SectionHeading';
-import { Typography } from '@mui/material';
 import { Temperature } from './Temperature';
 import { Wind } from './Wind';
 import { Humidity } from './Humidity';
+import { useState } from 'react';
+import { WeatherFormatted } from '../../api/weather/types';
+
+const locationOptions = [
+  'Sydney',
+  'Campbelltown',
+  'Yerevan',
+  'Moscow',
+  'Camden',
+  'Melbourne',
+  'Darwin',
+];
 
 export const Weather = () => {
+  const [location, setLocation] = useState<string | null>(null);
+
   const boxStyles = {
     maxWidth: 600,
     margin: 'auto',
@@ -17,16 +38,30 @@ export const Weather = () => {
   return (
     <Box sx={boxStyles}>
       <Card variant="outlined">
-        <SectionHeading heading="Weather" />
-        <WeatherContent />
+        <SectionHeading heading={location ?? 'Weather'} />
+        {location && (
+          <Button variant="text" onClick={() => setLocation(null)}>
+            reset
+          </Button>
+        )}
+        <WeatherContent location={location} setLocation={setLocation} />
       </Card>
     </Box>
   );
 };
 
-const WeatherContent = () => {
-  const { isLoading, isError, data, error } = useQuery('weather', () =>
-    getWeather('sydney')
+type LocationStateProps = {
+  location: string | null;
+  setLocation: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+const WeatherContent = ({ location, setLocation }: LocationStateProps) => {
+  const { isLoading, isError, data, error } = useQuery(
+    ['weather', location],
+    () => getWeather(location ?? ''),
+    {
+      enabled: !!location,
+    }
   );
 
   if (isLoading) {
@@ -37,29 +72,53 @@ const WeatherContent = () => {
     return <span>Error: {error}</span>;
   }
 
-  if (!data) {
-    return null;
+  if (!location || !data) {
+    return <LocationSearch location={location} setLocation={setLocation} />;
   }
 
-  return (
-    <Grid container justifyContent="space-between">
-      <Grid item px={10} sx={{ textAlign: 'left' }}>
-        <Typography variant="h3" sx={{ fontSize: 32 }}>
-          {data?.location}
-        </Typography>
-        <Temperature temperature={data.temperature.average} />
-        <Wind windSpeedMetresPerSecond={data.windSpeed} />
-        <Humidity humidity={data.humidity} />
-      </Grid>
+  return <WeatherDetails weather={data} />;
+};
 
-      <Grid item px={10} sx={{ textAlign: 'center' }}>
-        <img
-          src={getImageURL(data.icon)}
-          alt={data.shortDescription}
-          width="80px"
-        />
-        <p style={{ margin: 0 }}>{data.longDescription}</p>
-      </Grid>
-    </Grid>
+const LocationSearch = ({ location, setLocation }: LocationStateProps) => {
+  const [locationInputValue, setLocationInputValue] = useState('');
+
+  return (
+    <Autocomplete
+      value={location}
+      inputValue={locationInputValue}
+      onChange={(_, newValue) => {
+        setLocation(newValue);
+      }}
+      onInputChange={(_, newInputValue) => {
+        setLocationInputValue(newInputValue);
+      }}
+      disablePortal
+      id="combo-box-location"
+      options={locationOptions}
+      renderInput={(params) => <TextField {...params} label="Location" />}
+    />
   );
 };
+
+type WeatherDetailsProps = {
+  weather: WeatherFormatted;
+};
+
+const WeatherDetails = ({ weather }: WeatherDetailsProps) => (
+  <Grid container justifyContent="space-around">
+    <Grid item sx={{ textAlign: 'left' }}>
+      <Temperature temperature={weather.temperature.average} />
+      <Wind windSpeedMetresPerSecond={weather.windSpeed} />
+      <Humidity humidity={weather.humidity} />
+    </Grid>
+
+    <Grid item sx={{ textAlign: 'center' }}>
+      <img
+        src={getImageURL(weather.icon)}
+        alt={weather.shortDescription}
+        width="80px"
+      />
+      <p style={{ margin: 0 }}>{weather.longDescription}</p>
+    </Grid>
+  </Grid>
+);
