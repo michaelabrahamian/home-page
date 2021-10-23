@@ -27,4 +27,4 @@ export const getWeather = async (query: string): Promise<WeatherFormatted> => {
 };
 
 export const getImageURL = (imageCode: string): string =>
-  `${OPEN_WEATHER_MAP_IMAGE_BASE_URL}${imageCode}${OPEN_WEATHER_MAP_IMAGE_SUFFIX}`;
+  `${OPEN_WEATHER_MAP_IMAGE_BASE_URL}/${imageCode}${OPEN_WEATHER_MAP_IMAGE_SUFFIX}`;
