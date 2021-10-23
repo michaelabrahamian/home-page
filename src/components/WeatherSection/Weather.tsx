@@ -1,12 +1,7 @@
-import React from 'react';
-import {
-  Autocomplete,
-  Button,
-  Card,
-  CircularProgress,
-  Grid,
-  TextField,
-} from '@mui/material';
+import React, { useCallback, useEffect } from 'react';
+import debounce from 'lodash.debounce';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Button, Card, CircularProgress, Grid, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { useQuery } from 'react-query';
 import { getImageURL, getWeather } from '../../api/weather/weather';
@@ -17,55 +12,79 @@ import { Humidity } from './Humidity';
 import { useState } from 'react';
 import { WeatherFormatted } from '../../api/weather/types';
 
-const locationOptions = [
-  'Sydney',
-  'Campbelltown',
-  'Yerevan',
-  'Moscow',
-  'Camden',
-  'Melbourne',
-  'Darwin',
-];
+const boxStyles = {
+  maxWidth: 600,
+  margin: 'auto',
+};
+
+const DEBOUNCE_SET_LOCATION_DELAY_MS = 500;
 
 export const Weather = () => {
-  const [location, setLocation] = useState<string | null>(null);
+  const [location, setLocation] = useState<string | null>('');
+  const [locationSearch, setLocationSearch] = useState('');
+  const [showLocationSearch, setShowLocationSearch] = useState(true);
 
-  const boxStyles = {
-    maxWidth: 600,
-    margin: 'auto',
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSetLocation = useCallback(
+    debounce(
+      (locationSearch) => setLocation(locationSearch),
+      DEBOUNCE_SET_LOCATION_DELAY_MS
+    ),
+    []
+  );
+
+  useEffect(() => {
+    debouncedSetLocation(locationSearch);
+  }, [locationSearch, debouncedSetLocation]);
 
   return (
     <Box sx={boxStyles}>
       <Card variant="outlined">
         <div style={{ position: 'relative' }}>
           <SectionHeading
-            heading={location ?? 'Weather'}
+            heading={location || 'Weather'}
             headingStyles={{ display: 'inline-block' }}
           />
-          {location && (
+
+          {showLocationSearch ? (
+            <>
+              <br />
+              <LocationSearch
+                searchValue={locationSearch}
+                setSearchValue={setLocationSearch}
+              />
+              <br />
+            </>
+          ) : (
             <Button
               variant="text"
-              onClick={() => setLocation(null)}
+              onClick={() => setShowLocationSearch(true)}
               style={{ float: 'right', position: 'absolute', right: 0 }}
             >
-              reset
+              change
             </Button>
           )}
         </div>
-        <WeatherContent location={location} setLocation={setLocation} />
+
+        <WeatherContent
+          location={location}
+          setShowLocationSearch={setShowLocationSearch}
+        />
       </Card>
     </Box>
   );
 };
 
-type LocationStateProps = {
+type WeatherContentProps = {
   location: string | null;
-  setLocation: React.Dispatch<React.SetStateAction<string | null>>;
+  setShowLocationSearch: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const WeatherContent = ({ location, setLocation }: LocationStateProps) => {
-  const { isLoading, isError, data, error } = useQuery(
+const WeatherContent = ({
+  location,
+  setShowLocationSearch,
+}: WeatherContentProps) => {
+  const { isLoading, isError, isSuccess, data } = useQuery(
     ['weather', location],
     () => getWeather(location ?? ''),
     {
@@ -73,41 +92,50 @@ const WeatherContent = ({ location, setLocation }: LocationStateProps) => {
     }
   );
 
+  // remove the locations earch bar after a successful search
+  useEffect(() => {
+    if (isSuccess) {
+      setShowLocationSearch(false);
+    }
+  }, [isSuccess, setShowLocationSearch]);
+
   if (isLoading) {
     return <CircularProgress />;
   }
 
   if (isError) {
-    return <span>Error: {error}</span>;
+    return (
+      <span>
+        <ErrorOutlineIcon /> Unable to get weather details
+      </span>
+    );
   }
 
-  if (!location || !data) {
-    return <LocationSearch location={location} setLocation={setLocation} />;
+  if (!data) {
+    return null;
   }
 
   return <WeatherDetails weather={data} />;
 };
 
-const LocationSearch = ({ location, setLocation }: LocationStateProps) => {
-  const [locationInputValue, setLocationInputValue] = useState('');
-
-  return (
-    <Autocomplete
-      value={location}
-      inputValue={locationInputValue}
-      onChange={(_, newValue) => {
-        setLocation(newValue);
-      }}
-      onInputChange={(_, newInputValue) => {
-        setLocationInputValue(newInputValue);
-      }}
-      disablePortal
-      id="combo-box-location"
-      options={locationOptions}
-      renderInput={(params) => <TextField {...params} label="Location" />}
-    />
-  );
+type LocationSearchProps = {
+  searchValue: string;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 };
+
+const LocationSearch = ({
+  searchValue,
+  setSearchValue,
+}: LocationSearchProps) => (
+  <TextField
+    label="Location"
+    id="location"
+    variant="standard"
+    style={{ width: '80%', marginBottom: 10 }}
+    value={searchValue}
+    onChange={(event) => setSearchValue(event.target.value)}
+  />
+);
 
 type WeatherDetailsProps = {
   weather: WeatherFormatted;

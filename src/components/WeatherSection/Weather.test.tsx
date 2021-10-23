@@ -45,32 +45,28 @@ describe('Weather', () => {
   });
 
   describe('Weather component', () => {
-    it('displays a loading spinner after selecting a location', async () => {
+    it('displays a loading spinner after typing a location', async () => {
       renderWeather();
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
       fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
 
-      const sydneyOption = screen.getByRole('option', { name: 'Sydney' });
-      fireEvent.click(sydneyOption);
-
-      const loadingSpinner = screen.getByRole('progressbar');
+      const loadingSpinner = await screen.findByRole('progressbar');
 
       expect(loadingSpinner).toBeInTheDocument();
     });
 
-    it('fetches and displays location data after selecting a location', async () => {
+    it('fetches and displays location data after entering a valid location', async () => {
       renderWeather();
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
       fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
 
-      const sydneyOption = screen.getByRole('option', { name: 'Sydney' });
-      fireEvent.click(sydneyOption);
+      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
 
       // wait for loading spinner to disappear
       await waitFor(() =>
-        expect(screen.queryByRole('progressBar')).not.toBeInTheDocument()
+        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
       );
 
       const temperature = await screen.findByText('28°C');
@@ -86,45 +82,52 @@ describe('Weather', () => {
       expect(image).toBeInTheDocument();
     });
 
-    it('displays a reset button only after location is selected', async () => {
+    it('displays the change location button only after location is selected', async () => {
       renderWeather();
 
-      expect(screen.queryByText(/reset/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/change/i)).not.toBeInTheDocument();
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
       fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
 
-      const sydneyOption = screen.getByRole('option', { name: 'Sydney' });
-      fireEvent.click(sydneyOption);
+      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
 
       // wait for loading spinner to disappear
       await waitFor(() =>
-        expect(screen.queryByRole('progressBar')).not.toBeInTheDocument()
+        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
       );
 
-      expect(screen.getByText(/reset/i)).toBeInTheDocument();
+      expect(screen.getByText(/change/i)).toBeInTheDocument();
     });
 
-    it('should clear weather location after clicking reset', async () => {
+    it('should show the location search bar after clicking the change button', async () => {
       renderWeather();
 
-      const locationSearch = screen.getByRole('textbox', { name: 'Location' });
+      let locationSearch: HTMLElement | null = screen.getByRole('textbox', {
+        name: 'Location',
+      });
       fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
 
-      const sydneyOption = screen.getByRole('option', { name: 'Sydney' });
-      fireEvent.click(sydneyOption);
+      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
 
       // wait for loading spinner to disappear
       await waitFor(() =>
         expect(screen.queryByRole('progressBar')).not.toBeInTheDocument()
       );
 
+      // search bar should disappear
+      locationSearch = screen.queryByRole('textbox', { name: 'Location' });
+      expect(locationSearch).not.toBeInTheDocument();
+
+      // details should appear
       expect(screen.getByText('Wind:', { exact: false })).toBeInTheDocument();
 
-      const resetButton = screen.getByText(/reset/i);
-      fireEvent.click(resetButton);
+      const changeLocationButton = screen.getByText(/change/i);
+      fireEvent.click(changeLocationButton);
 
-      expect(screen.queryByText('Wind:')).not.toBeInTheDocument();
+      // search bar should appear
+      locationSearch = screen.getByRole('textbox', { name: 'Location' });
+      expect(locationSearch).toBeInTheDocument();
     });
   });
 });
