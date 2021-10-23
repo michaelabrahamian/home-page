@@ -3,11 +3,15 @@ import { styled } from '@mui/system';
 
 type SectionHeadingProps = {
   heading: string;
+  headingStyles?: React.CSSProperties;
 };
-export const SectionHeading = ({ heading }: SectionHeadingProps) => (
-  <header>
-    <Heading variant="h2">{heading}</Heading>
-  </header>
+export const SectionHeading = ({
+  heading,
+  headingStyles,
+}: SectionHeadingProps) => (
+  <Heading variant="h2" style={headingStyles}>
+    {heading}
+  </Heading>
 );
 
 const Heading = styled(Typography)`

@@ -38,12 +38,21 @@ export const Weather = () => {
   return (
     <Box sx={boxStyles}>
       <Card variant="outlined">
-        <SectionHeading heading={location ?? 'Weather'} />
-        {location && (
-          <Button variant="text" onClick={() => setLocation(null)}>
-            reset
-          </Button>
-        )}
+        <div style={{ position: 'relative' }}>
+          <SectionHeading
+            heading={location ?? 'Weather'}
+            headingStyles={{ display: 'inline-block' }}
+          />
+          {location && (
+            <Button
+              variant="text"
+              onClick={() => setLocation(null)}
+              style={{ float: 'right', position: 'absolute', right: 0 }}
+            >
+              reset
+            </Button>
+          )}
+        </div>
         <WeatherContent location={location} setLocation={setLocation} />
       </Card>
     </Box>
@@ -104,7 +113,7 @@ type WeatherDetailsProps = {
   weather: WeatherFormatted;
 };
 
-const WeatherDetails = ({ weather }: WeatherDetailsProps) => (
+export const WeatherDetails = ({ weather }: WeatherDetailsProps) => (
   <Grid container justifyContent="space-around">
     <Grid item sx={{ textAlign: 'left' }}>
       <Temperature temperature={weather.temperature.average} />
