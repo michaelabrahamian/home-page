@@ -17,7 +17,7 @@ const boxStyles = {
   margin: 'auto',
 };
 
-const DEBOUNCE_SET_LOCATION_DELAY_MS = 500;
+export const DEBOUNCE_SET_LOCATION_DELAY_MS = 500;
 
 export const Weather = () => {
   const [location, setLocation] = useState<string | null>('');

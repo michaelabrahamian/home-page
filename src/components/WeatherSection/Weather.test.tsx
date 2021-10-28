@@ -1,5 +1,10 @@
+import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Weather, WeatherDetails } from './Weather';
+import {
+  Weather,
+  WeatherDetails,
+  DEBOUNCE_SET_LOCATION_DELAY_MS,
+} from './Weather';
 import { RenderWithProviders } from '../RenderWithProviders';
 import { WeatherFormatted } from '../../api/weather/types';
 
@@ -9,6 +14,14 @@ const renderWeather = () =>
       <Weather />
     </RenderWithProviders>
   );
+
+beforeEach(() => {
+  jest.useFakeTimers();
+});
+
+afterEach(() => {
+  jest.useRealTimers();
+});
 
 describe('Weather', () => {
   describe('WeatherDetails', () => {
@@ -49,7 +62,10 @@ describe('Weather', () => {
       renderWeather();
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
-      fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
+      userEvent.type(locationSearch, 'Sydney');
+
+      // skip timers ahead by debounce delay
+      jest.advanceTimersByTime(DEBOUNCE_SET_LOCATION_DELAY_MS);
 
       const loadingSpinner = await screen.findByRole('progressbar');
 
@@ -60,14 +76,10 @@ describe('Weather', () => {
       renderWeather();
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
-      fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
+      userEvent.type(locationSearch, 'Sydney');
 
-      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
-
-      // wait for loading spinner to disappear
-      await waitFor(() =>
-        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
-      );
+      // wait for search bar to disappear
+      await waitFor(() => expect(locationSearch).not.toBeInTheDocument());
 
       const temperature = await screen.findByText('28°C');
       const wind = screen.getByText('Wind: 19 km/h');
@@ -88,14 +100,13 @@ describe('Weather', () => {
       expect(screen.queryByText(/change/i)).not.toBeInTheDocument();
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
-      fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
+      userEvent.type(locationSearch, 'Sydney');
 
-      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+      // skip timers ahead by debounce delay
+      jest.advanceTimersByTime(DEBOUNCE_SET_LOCATION_DELAY_MS);
 
-      // wait for loading spinner to disappear
-      await waitFor(() =>
-        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
-      );
+      // wait for search bar to disappear
+      await waitFor(() => expect(locationSearch).not.toBeInTheDocument());
 
       expect(screen.getByText(/change/i)).toBeInTheDocument();
     });
@@ -106,18 +117,15 @@ describe('Weather', () => {
       let locationSearch: HTMLElement | null = screen.getByRole('textbox', {
         name: 'Location',
       });
-      fireEvent.change(locationSearch, { target: { value: 'Sydney' } });
 
-      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+      userEvent.type(locationSearch, 'Sydney');
 
-      // wait for loading spinner to disappear
-      await waitFor(() =>
-        expect(screen.queryByRole('progressBar')).not.toBeInTheDocument()
-      );
+      // skip timers ahead by debounce delay
+      jest.advanceTimersByTime(DEBOUNCE_SET_LOCATION_DELAY_MS);
 
-      // search bar should disappear
+      // wait for search bar to disappear
       locationSearch = screen.queryByRole('textbox', { name: 'Location' });
-      expect(locationSearch).not.toBeInTheDocument();
+      await waitFor(() => expect(locationSearch).not.toBeInTheDocument());
 
       // details should appear
       expect(screen.getByText('Wind:', { exact: false })).toBeInTheDocument();
