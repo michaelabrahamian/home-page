@@ -19,17 +19,29 @@ const boxStyles = {
 
 export const DEBOUNCE_SET_LOCATION_DELAY_MS = 500;
 
+const WEATHER_LOCATION_STORAGE_KEY = 'weather-location';
+
 export const Weather = () => {
-  const [location, setLocation] = useState<string | null>('');
-  const [locationSearch, setLocationSearch] = useState('');
-  const [showLocationSearch, setShowLocationSearch] = useState(true);
+  const INITIAL_WEATHER_LOCATION = localStorage.getItem(
+    WEATHER_LOCATION_STORAGE_KEY
+  );
+
+  const [location, setLocation] = useState<string | null>(
+    INITIAL_WEATHER_LOCATION ?? ''
+  );
+  const [locationSearch, setLocationSearch] = useState(
+    INITIAL_WEATHER_LOCATION ?? ''
+  );
+  const [showLocationSearch, setShowLocationSearch] = useState(
+    !INITIAL_WEATHER_LOCATION
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSetLocation = useCallback(
-    debounce(
-      (locationSearch) => setLocation(locationSearch),
-      DEBOUNCE_SET_LOCATION_DELAY_MS
-    ),
+    debounce((locationSearch) => {
+      setLocation(locationSearch);
+      localStorage.setItem(WEATHER_LOCATION_STORAGE_KEY, locationSearch);
+    }, DEBOUNCE_SET_LOCATION_DELAY_MS),
     []
   );
 

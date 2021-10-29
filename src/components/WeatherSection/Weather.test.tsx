@@ -17,6 +17,7 @@ const renderWeather = () =>
 
 beforeEach(() => {
   jest.useFakeTimers();
+  localStorage.clear();
 });
 
 afterEach(() => {
@@ -136,6 +137,30 @@ describe('Weather', () => {
       // search bar should appear
       locationSearch = screen.getByRole('textbox', { name: 'Location' });
       expect(locationSearch).toBeInTheDocument();
+    });
+
+    it('persists weather location after reloading app', async () => {
+      const { unmount } = renderWeather();
+
+      const locationSearch = screen.getByRole('textbox', { name: 'Location' });
+      userEvent.type(locationSearch, 'Sydney');
+
+      // skip timers ahead by debounce delay
+      jest.advanceTimersByTime(DEBOUNCE_SET_LOCATION_DELAY_MS);
+
+      // wait for search bar to disappear
+      await waitFor(() => expect(locationSearch).not.toBeInTheDocument());
+
+      // details should appear
+      expect(screen.getByText('Wind:', { exact: false })).toBeInTheDocument();
+
+      // unmount then remount
+      unmount();
+      renderWeather();
+
+      // wait for persisted location and details to appear
+      expect(await screen.findByText('Sydney')).toBeInTheDocument();
+      expect(screen.getByText('Wind:', { exact: false })).toBeInTheDocument();
     });
   });
 });
