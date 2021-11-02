@@ -16,5 +16,6 @@ export const LocationSearch = ({
     style={{ width: '80%', marginBottom: 10 }}
     value={searchValue}
     onChange={(event) => setSearchValue(event.target.value)}
+    autoFocus
   />
 );
