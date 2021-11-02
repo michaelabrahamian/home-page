@@ -6,7 +6,7 @@ import {
   DEBOUNCE_SET_LOCATION_DELAY_MS,
 } from './Weather';
 import { RenderWithProviders } from '../RenderWithProviders';
-import { WeatherFormatted } from '../../api/weather/types';
+import { WeatherData } from '../../types/weather';
 
 const renderWeather = () =>
   render(
@@ -27,7 +27,7 @@ afterEach(() => {
 describe('Weather', () => {
   describe('WeatherDetails', () => {
     it('displays the correct weather details', async () => {
-      const weather: WeatherFormatted = {
+      const weather: WeatherData = {
         location: 'Sydney',
         icon: 'ICON',
         longDescription: 'clear sky',
@@ -78,6 +78,9 @@ describe('Weather', () => {
 
       const locationSearch = screen.getByRole('textbox', { name: 'Location' });
       userEvent.type(locationSearch, 'Sydney');
+
+      // skip timers ahead by debounce delay
+      jest.advanceTimersByTime(DEBOUNCE_SET_LOCATION_DELAY_MS);
 
       // wait for search bar to disappear
       await waitFor(() => expect(locationSearch).not.toBeInTheDocument());

@@ -1,16 +1,17 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Button, Card, CircularProgress, Grid, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import { useQuery } from 'react-query';
-import { getImageURL, getWeather } from '../../api/weather/weather';
+import { useQuery } from '@apollo/client';
+
+import { GET_WEATHER, GET_WEATHER_VARIABLES } from '../../graphql/queries';
+import { getImageURL } from '../../api/weather/image';
+import { WeatherData, WeatherResponse } from '../../types/weather';
 import { SectionHeading } from '../SectionHeading';
 import { Temperature } from './Temperature';
 import { Wind } from './Wind';
 import { Humidity } from './Humidity';
-import { useState } from 'react';
-import { WeatherFormatted } from '../../api/weather/types';
 
 const boxStyles = {
   maxWidth: 600,
@@ -54,6 +55,7 @@ export const Weather = () => {
       <Card variant="outlined">
         <div style={{ position: 'relative' }}>
           <SectionHeading
+            testId="weather-section-heading"
             heading={location || 'Weather'}
             headingStyles={{ display: 'inline-block' }}
           />
@@ -80,7 +82,7 @@ export const Weather = () => {
 
         <WeatherContent
           location={location}
-          setShowLocationSearch={setShowLocationSearch}
+          onSuccessfulWeatherQuery={() => setShowLocationSearch(false)}
         />
       </Card>
     </Box>
@@ -89,33 +91,38 @@ export const Weather = () => {
 
 type WeatherContentProps = {
   location: string | null;
-  setShowLocationSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccessfulWeatherQuery: () => void;
 };
 
 const WeatherContent = ({
   location,
-  setShowLocationSearch,
+  onSuccessfulWeatherQuery,
 }: WeatherContentProps) => {
-  const { isLoading, isError, isSuccess, data } = useQuery(
-    ['weather', location],
-    () => getWeather(location ?? ''),
-    {
-      enabled: !!location,
-    }
-  );
+  const { loading, error, data } = useQuery<
+    WeatherResponse,
+    GET_WEATHER_VARIABLES
+  >(GET_WEATHER, {
+    variables: {
+      location: location ?? '',
+    },
+    skip: !location,
+  });
 
-  // remove the locations earch bar after a successful search
+  const isSuccess = !loading && !error && data;
+
+  // remove the location search bar after a successful search
   useEffect(() => {
     if (isSuccess) {
-      setShowLocationSearch(false);
+      onSuccessfulWeatherQuery();
     }
-  }, [isSuccess, setShowLocationSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
-  if (isLoading) {
+  if (loading) {
     return <CircularProgress />;
   }
 
-  if (isError) {
+  if (error) {
     return (
       <span>
         <ErrorOutlineIcon /> Unable to get weather details
@@ -123,11 +130,11 @@ const WeatherContent = ({
     );
   }
 
-  if (!data) {
+  if (!data || !data.weather) {
     return null;
   }
 
-  return <WeatherDetails weather={data} />;
+  return <WeatherDetails weather={data.weather} />;
 };
 
 type LocationSearchProps = {
@@ -150,7 +157,7 @@ const LocationSearch = ({
 );
 
 type WeatherDetailsProps = {
-  weather: WeatherFormatted;
+  weather: WeatherData;
 };
 
 export const WeatherDetails = ({ weather }: WeatherDetailsProps) => (

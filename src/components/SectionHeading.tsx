@@ -4,12 +4,14 @@ import { styled } from '@mui/system';
 type SectionHeadingProps = {
   heading: string;
   headingStyles?: React.CSSProperties;
+  testId: string;
 };
 export const SectionHeading = ({
   heading,
   headingStyles,
+  testId,
 }: SectionHeadingProps) => (
-  <Heading variant="h2" style={headingStyles}>
+  <Heading variant="h2" style={headingStyles} data-testid={testId}>
     {heading}
   </Heading>
 );
