@@ -1,7 +1,7 @@
 import { Container, Grid } from '@mui/material';
 import './App.css';
 import { PageHeader } from './components/Header';
-import { Weather } from './components/WeatherSection/Weather';
+import { WeatherWidget } from './components/WeatherSection/Weather';
 import { RenderWithProviders } from './components/RenderWithProviders';
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
         <Container>
           <PageHeader />
           <Grid sx={{ marginTop: 5 }}>
-            <Weather />
+            <WeatherWidget />
           </Grid>
         </Container>
       </div>

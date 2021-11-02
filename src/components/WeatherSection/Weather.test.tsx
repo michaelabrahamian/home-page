@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import {
-  Weather,
+  WeatherWidget,
   WeatherDetails,
   DEBOUNCE_SET_LOCATION_DELAY_MS,
 } from './Weather';
@@ -11,7 +11,7 @@ import { WeatherData } from '../../types/weather';
 const renderWeather = () =>
   render(
     <RenderWithProviders>
-      <Weather />
+      <WeatherWidget />
     </RenderWithProviders>
   );
 
@@ -58,7 +58,7 @@ describe('Weather', () => {
     });
   });
 
-  describe('Weather component', () => {
+  describe('WeatherWidget component', () => {
     it('displays a loading spinner after typing a location', async () => {
       renderWeather();
 

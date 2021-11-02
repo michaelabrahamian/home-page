@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { Button, Card, CircularProgress, Grid, TextField } from '@mui/material';
+import { Button, Card, CircularProgress, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { useQuery } from '@apollo/client';
 
@@ -12,6 +12,7 @@ import { SectionHeading } from '../SectionHeading';
 import { Temperature } from './Temperature';
 import { Wind } from './Wind';
 import { Humidity } from './Humidity';
+import { LocationSearch } from './LocationSearch';
 
 const boxStyles = {
   maxWidth: 600,
@@ -22,7 +23,7 @@ export const DEBOUNCE_SET_LOCATION_DELAY_MS = 500;
 
 const WEATHER_LOCATION_STORAGE_KEY = 'weather-location';
 
-export const Weather = () => {
+export const WeatherWidget = () => {
   const INITIAL_WEATHER_LOCATION = localStorage.getItem(
     WEATHER_LOCATION_STORAGE_KEY
   );
@@ -136,25 +137,6 @@ const WeatherContent = ({
 
   return <WeatherDetails weather={data.weather} />;
 };
-
-type LocationSearchProps = {
-  searchValue: string;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const LocationSearch = ({
-  searchValue,
-  setSearchValue,
-}: LocationSearchProps) => (
-  <TextField
-    label="Location"
-    id="location"
-    variant="standard"
-    style={{ width: '80%', marginBottom: 10 }}
-    value={searchValue}
-    onChange={(event) => setSearchValue(event.target.value)}
-  />
-);
 
 type WeatherDetailsProps = {
   weather: WeatherData;
