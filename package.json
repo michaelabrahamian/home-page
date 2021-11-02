@@ -29,7 +29,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docker:build": "docker build -t home-page-frontend .",
+    "docker:run": "docker run --rm -p 80:80 home-page-frontend"
   },
   "eslintConfig": {
     "extends": [
