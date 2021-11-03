@@ -55,7 +55,6 @@ export const WeatherWidget = () => {
     <Box sx={boxStyles}>
       <Card variant="outlined">
         <div style={{ position: 'relative' }}>
-          Testing a change
           <SectionHeading
             testId="weather-section-heading"
             heading={location || 'Weather'}
