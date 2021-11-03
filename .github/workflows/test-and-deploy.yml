@@ -24,8 +24,7 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-# name: Deploy to Amazon ECS
-name: Deploy to Amazon ECR
+name: test and deploy
 
 on:
   push:
@@ -42,6 +41,15 @@ env:
   CONTAINER_NAME: home-page # set this to the name of the container in the containerDefinitions section of your task definition
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm install
+      - name: Run tests
+        run: npm run test
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
