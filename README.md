@@ -6,10 +6,10 @@ uses a GraphQL (`apollo-server`) backend.
 
 ## To run locally:
 
-```
-npm i
-npm start
-```
+1. `cp .env.example .env`
+2. fill in the environment variable for your local backend server URL
+3. `npm i`
+4. `npm run start`
 
 ## To run with docker:
 
