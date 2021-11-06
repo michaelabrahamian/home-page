@@ -60,7 +60,6 @@ export const WeatherWidget = () => {
             heading={location || 'Weather'}
             headingStyles={{ display: 'inline-block' }}
           />
-
           {showLocationSearch ? (
             <>
               <br />
