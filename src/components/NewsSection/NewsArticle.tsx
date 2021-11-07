@@ -18,8 +18,8 @@ export const NewsArticle = ({ newsItem }: NewsArticleProps) => {
           primary={title}
           secondary={
             <Grid container justifyContent="space-between">
-              <Grid item>{formattedDate}</Grid>
               <Grid item>{category}</Grid>
+              <Grid item>{formattedDate}</Grid>
             </Grid>
           }
         />

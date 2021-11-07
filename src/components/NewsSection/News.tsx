@@ -48,7 +48,13 @@ const NewsContent = () => {
 
   return (
     <>
-      <List>
+      <List
+        dense
+        sx={{
+          maxHeight: 500,
+          overflow: 'auto',
+        }}
+      >
         {data.news.results.map((newsItem) => (
           <NewsArticle newsItem={newsItem} key={newsItem.id} />
         ))}
