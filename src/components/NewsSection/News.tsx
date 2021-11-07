@@ -7,6 +7,7 @@ import { SectionHeading } from '../SectionHeading';
 import { WidgetContainer } from '../WidgetContainer';
 import { GET_NEWS, GET_NEWS_VARIABLES } from '../../graphql/queries';
 import { NewsResponse } from '../../types/news';
+import { NewsArticle } from './NewsArticle';
 
 export const NewsWidget = () => (
   <WidgetContainer>
@@ -48,7 +49,7 @@ const NewsContent = () => {
   return (
     <>
       {data.news.results.map((newsItem) => (
-        <p>{newsItem.title}</p>
+        <NewsArticle newsItem={newsItem} />
       ))}
     </>
   );
