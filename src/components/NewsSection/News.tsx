@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, List } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import WarningIcon from '@mui/icons-material/Warning';
 
@@ -48,9 +48,11 @@ const NewsContent = () => {
 
   return (
     <>
-      {data.news.results.map((newsItem) => (
-        <NewsArticle newsItem={newsItem} />
-      ))}
+      <List>
+        {data.news.results.map((newsItem) => (
+          <NewsArticle newsItem={newsItem} key={newsItem.id} />
+        ))}
+      </List>
     </>
   );
 };

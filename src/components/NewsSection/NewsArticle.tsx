@@ -1,4 +1,4 @@
-import { Grid, Card, CardActionArea } from '@mui/material';
+import { Grid, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { NewsItem } from '../../types/news';
 import { formatDate } from '../../utils/dates';
 
@@ -12,14 +12,18 @@ export const NewsArticle = ({ newsItem }: NewsArticleProps) => {
   const formattedDate = formatDate(publicationDate);
 
   return (
-    <Grid item data-testid={id}>
-      <Card>
-        <CardActionArea href={url} target="_blank">
-          <p>{title}</p>
-          <p>{formattedDate}</p>
-          <p>{category}</p>
-        </CardActionArea>
-      </Card>
-    </Grid>
+    <ListItem data-testid={id}>
+      <ListItemButton href={url} target="_blank" component="a">
+        <ListItemText
+          primary={title}
+          secondary={
+            <Grid container justifyContent="space-between">
+              <Grid item>{formattedDate}</Grid>
+              <Grid item>{category}</Grid>
+            </Grid>
+          }
+        />
+      </ListItemButton>
+    </ListItem>
   );
 };
