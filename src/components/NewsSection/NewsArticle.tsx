@@ -1,6 +1,6 @@
 import { Grid, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { NewsItem } from '../../types/news';
-import { formatDate } from '../../utils/dates';
+import { getFormattedElapsedTime } from '../../utils/dates';
 
 type NewsArticleProps = {
   newsItem: NewsItem;
@@ -9,7 +9,7 @@ type NewsArticleProps = {
 export const NewsArticle = ({ newsItem }: NewsArticleProps) => {
   const { id, title, publicationDate, category, url } = newsItem;
 
-  const formattedDate = formatDate(publicationDate);
+  const formattedDate = getFormattedElapsedTime(publicationDate);
 
   return (
     <ListItem data-testid={id}>
