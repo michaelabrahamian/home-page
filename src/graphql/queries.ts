@@ -22,3 +22,21 @@ export const GET_WEATHER = gql`
     }
   }
 `;
+
+export type GET_NEWS_VARIABLES = {
+  query: String;
+};
+
+export const GET_NEWS = gql`
+  query GetNews($query: String) {
+    news(query: $query) {
+      results {
+        id
+        title
+        url
+        publicationDate
+        category
+      }
+    }
+  }
+`;
