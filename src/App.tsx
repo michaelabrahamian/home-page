@@ -1,18 +1,17 @@
-import { Container, Grid } from '@mui/material';
+import { Container } from '@mui/material';
+
 import './App.css';
 import { PageHeader } from './components/Header';
-import { WeatherWidget } from './components/WeatherSection/Weather';
 import { RenderWithProviders } from './components/RenderWithProviders';
+import { Widgets } from './components/Widgets';
 
 const App = () => {
   return (
     <RenderWithProviders>
       <div className="App">
-        <Container>
+        <Container sx={{ minHeight: 'inherit' }}>
           <PageHeader />
-          <Grid sx={{ marginTop: 5 }}>
-            <WeatherWidget />
-          </Grid>
+          <Widgets />
         </Container>
       </div>
     </RenderWithProviders>

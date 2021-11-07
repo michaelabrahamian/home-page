@@ -1,23 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { Button, Card, CircularProgress, Grid } from '@mui/material';
-import { Box } from '@mui/system';
+import { Button, CircularProgress, Grid } from '@mui/material';
 import { useQuery } from '@apollo/client';
 
 import { GET_WEATHER, GET_WEATHER_VARIABLES } from '../../graphql/queries';
 import { getImageURL } from '../../api/weather/image';
 import { WeatherData, WeatherResponse } from '../../types/weather';
 import { SectionHeading } from '../SectionHeading';
+import { WidgetContainer } from '../WidgetContainer';
 import { Temperature } from './Temperature';
 import { Wind } from './Wind';
 import { Humidity } from './Humidity';
 import { LocationSearch } from './LocationSearch';
-
-const boxStyles = {
-  maxWidth: 600,
-  margin: 'auto',
-};
 
 export const DEBOUNCE_SET_LOCATION_DELAY_MS = 500;
 
@@ -52,40 +47,38 @@ export const WeatherWidget = () => {
   }, [locationSearch, debouncedSetLocation]);
 
   return (
-    <Box sx={boxStyles}>
-      <Card variant="outlined">
-        <div style={{ position: 'relative' }}>
-          <SectionHeading
-            testId="weather-section-heading"
-            heading={location || 'Weather'}
-            headingStyles={{ display: 'inline-block' }}
-          />
-          {showLocationSearch ? (
-            <>
-              <br />
-              <LocationSearch
-                searchValue={locationSearch}
-                setSearchValue={setLocationSearch}
-              />
-              <br />
-            </>
-          ) : (
-            <Button
-              variant="text"
-              onClick={() => setShowLocationSearch(true)}
-              style={{ float: 'right', position: 'absolute', right: 0 }}
-            >
-              change
-            </Button>
-          )}
-        </div>
-
-        <WeatherContent
-          location={location}
-          onSuccessfulWeatherQuery={() => setShowLocationSearch(false)}
+    <WidgetContainer>
+      <div style={{ position: 'relative' }}>
+        <SectionHeading
+          testId="weather-section-heading"
+          heading={location || 'Weather'}
+          headingStyles={{ display: 'inline-block' }}
         />
-      </Card>
-    </Box>
+        {showLocationSearch ? (
+          <>
+            <br />
+            <LocationSearch
+              searchValue={locationSearch}
+              setSearchValue={setLocationSearch}
+            />
+            <br />
+          </>
+        ) : (
+          <Button
+            variant="text"
+            onClick={() => setShowLocationSearch(true)}
+            style={{ float: 'right', position: 'absolute', right: 0 }}
+          >
+            change
+          </Button>
+        )}
+      </div>
+
+      <WeatherContent
+        location={location}
+        onSuccessfulWeatherQuery={() => setShowLocationSearch(false)}
+      />
+    </WidgetContainer>
   );
 };
 
