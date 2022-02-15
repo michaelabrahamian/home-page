@@ -1,4 +1,11 @@
-import { Grid, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import styled from '@emotion/styled';
+import {
+  Grid,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import { NewsItem } from '../../types/news';
 import { getFormattedElapsedTime } from '../../utils/dates';
 
@@ -13,17 +20,27 @@ export const NewsArticle = ({ newsItem }: NewsArticleProps) => {
 
   return (
     <ListItem data-testid={id}>
-      <ListItemButton href={url} target="_blank" component="a">
-        <ListItemText
-          primary={title}
-          secondary={
-            <Grid container justifyContent="space-between">
-              <Grid item>{category}</Grid>
-              <Grid item>{formattedDate}</Grid>
-            </Grid>
-          }
-        />
+      <ListItemButton
+        href={url}
+        target="_blank"
+        component="a"
+        sx={{ flexDirection: 'column', alignItems: 'flex-start' }}
+      >
+        <ListItemText primary={title} />
+        <Grid container justifyContent="space-between">
+          <Grid item>
+            <SubText>{category}</SubText>
+          </Grid>
+          <Grid item>
+            <SubText>{formattedDate}</SubText>
+          </Grid>
+        </Grid>
       </ListItemButton>
     </ListItem>
   );
 };
+
+const SubText = styled(Typography)`
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.6);
+`;
