@@ -123,7 +123,7 @@ const WeatherContent = ({
     );
   }
 
-  if (!data || !data.weather) {
+  if (!data?.weather) {
     return null;
   }
 

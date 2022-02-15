@@ -14,7 +14,7 @@ beforeAll(() =>
 );
 
 beforeEach(() => {
-  return apolloClient.clearStore();
+  apolloClient.clearStore();
 });
 
 // Reset any request handlers that we may add during the tests,

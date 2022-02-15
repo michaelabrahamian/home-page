@@ -1,5 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { server, graphql } from '../../test-utils/msw';
+
 import {
   WeatherWidget,
   WeatherDetails,
@@ -164,6 +166,33 @@ describe('Weather', () => {
       // wait for persisted location and details to appear
       expect(await screen.findByText('Sydney')).toBeInTheDocument();
       expect(screen.getByText('Wind:', { exact: false })).toBeInTheDocument();
+    });
+
+    it('displays an error message if there is an error fetching weather', async () => {
+      server.use(
+        graphql.query('GetWeather', (_, res, ctx) =>
+          res(
+            ctx.errors([
+              {
+                message: 'Error',
+              },
+            ])
+          )
+        )
+      );
+
+      renderWeather();
+
+      const locationSearch = screen.getByRole('textbox', { name: 'Location' });
+      userEvent.type(locationSearch, 'Sydney');
+
+      // skip timers ahead by debounce delay
+      jest.advanceTimersByTime(DEBOUNCE_SET_LOCATION_DELAY_MS);
+
+      const errorMessage = await screen.findByText(
+        /unable to get weather details/i
+      );
+      expect(errorMessage).toBeInTheDocument();
     });
   });
 });

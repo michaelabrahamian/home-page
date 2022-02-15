@@ -33,12 +33,12 @@ const NewsContent = () => {
   if (error) {
     return (
       <span>
-        <ErrorOutlineIcon /> Unable to get weather details
+        <ErrorOutlineIcon /> Unable to get news
       </span>
     );
   }
 
-  if (!data || !data.news || !data.news.results?.length) {
+  if (!data?.news?.results?.length) {
     return (
       <span>
         <WarningIcon /> No results found.
