@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Button, CircularProgress, Grid } from '@mui/material';
 import { useQuery } from '@apollo/client';
 
+import { useAppDispatch } from '../../store/hooks';
+import { setLocation as setStoreLocation } from '../../store/slice/weather';
 import { GET_WEATHER, GET_WEATHER_VARIABLES } from '../../graphql/queries';
 import { getImageURL } from '../../api/weather/image';
 import { WeatherData, WeatherResponse } from '../../types/weather';
@@ -33,11 +35,14 @@ export const WeatherWidget = () => {
     !INITIAL_WEATHER_LOCATION
   );
 
+  const dispatch = useAppDispatch();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSetLocation = useCallback(
     debounce((locationSearch) => {
       setLocation(locationSearch);
       localStorage.setItem(WEATHER_LOCATION_STORAGE_KEY, locationSearch);
+      dispatch(setStoreLocation(locationSearch));
     }, DEBOUNCE_SET_LOCATION_DELAY_MS),
     []
   );
