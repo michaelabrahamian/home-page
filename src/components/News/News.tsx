@@ -11,7 +11,7 @@ import { SectionHeading } from '../SectionHeading';
 import { WidgetContainer } from '../WidgetContainer';
 import { NewsArticle } from './NewsArticle';
 
-export const NewsWidget = () => (
+export const NewsWidget = (): JSX.Element => (
   <WidgetContainer>
     <SectionHeading testId="news-section-heading" heading="News" />
     <NewsContent />
@@ -20,7 +20,7 @@ export const NewsWidget = () => (
 
 const FALLBACK_QUERY = '';
 
-const NewsContent = () => {
+const NewsContent = (): JSX.Element => {
   const location = useAppSelector(selectLocation);
 
   const { loading, error, data } = useQuery<NewsResponse, GET_NEWS_VARIABLES>(

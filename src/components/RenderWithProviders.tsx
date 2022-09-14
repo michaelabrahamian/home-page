@@ -5,7 +5,9 @@ import { store } from '../store';
 
 type RenderWithProvidersProps = { children: React.ReactNode };
 
-export const RenderWithProviders = ({ children }: RenderWithProvidersProps) => (
+export const RenderWithProviders = ({
+  children,
+}: RenderWithProvidersProps): JSX.Element => (
   <ReduxProvider store={store}>
     <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
   </ReduxProvider>
