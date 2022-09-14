@@ -11,7 +11,7 @@ export const SectionHeading = ({
   headingStyles,
   testId,
 }: SectionHeadingProps) => (
-  <Heading variant="h2" style={headingStyles} data-testid={testId}>
+  <Heading variant="h3" style={headingStyles} data-testid={testId}>
     {heading}
   </Heading>
 );
