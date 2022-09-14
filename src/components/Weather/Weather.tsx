@@ -41,7 +41,9 @@ export const WeatherWidget = () => {
   const debouncedSetLocation = useCallback(
     debounce((locationSearch) => {
       setLocation(locationSearch);
+
       localStorage.setItem(WEATHER_LOCATION_STORAGE_KEY, locationSearch);
+
       dispatch(setStoreLocation(locationSearch));
     }, DEBOUNCE_SET_LOCATION_DELAY_MS),
     []
