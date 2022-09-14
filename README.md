@@ -17,3 +17,13 @@ uses a GraphQL (`apollo-server`) backend.
 docker build -t home-page-frontend .
 docker run --rm -p 80:80 home-page-frontend
 ```
+
+## Webpack OpenSSL issue for Node versions 17+
+
+Reference: https://github.com/webpack/webpack/issues/14532#issuecomment-949498098
+
+Work around is to start the app with the following environment variable:
+
+```
+NODE_OPTIONS=--openssl-legacy-provider npm run start
+```
