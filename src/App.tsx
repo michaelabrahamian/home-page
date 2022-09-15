@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 
 import './App.css';
-import { PageHeader } from './components/Header';
+import { PageHeader } from './components/Header/Header';
 import { RenderWithProviders } from './components/RenderWithProviders';
 import { Widgets } from './components/Widgets';
 

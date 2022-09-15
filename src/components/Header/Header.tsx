@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import { Time } from './Time/Time';
+import { Time } from '../Time/Time';
 
-export const PageHeader = () => (
+export const PageHeader = (): JSX.Element => (
   <header>
     <MainHeader variant="h1">Home page</MainHeader>
     <SubHeader variant="h2">
